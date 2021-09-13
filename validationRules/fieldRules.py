@@ -40,7 +40,7 @@ class StringRules(BaseModel):
     @staticmethod
     @doubleWrap
     def keywordCheckRule(func, keyword_list: List[str] = None, startswith: str = None, endswith: str = None,
-                         min_length: int = None, max_length: int = None, level: int = 3):
+                         min_length: int = None, max_length: int = None, password_level: int = 0):
         """
         输入字符验证
         :param func: 被装饰check函数
@@ -49,7 +49,7 @@ class StringRules(BaseModel):
         :param endswith: 以***为结尾
         :param min_length: 最小长度
         :param max_length: 最大长度
-        :param level: 验证登记 默认为3   {3:"必须大小写字母数字以及特殊符号",2:"必须包含大小写字母及数字",3:"必须包含字母及数字",0:"不做验证"}
+        :param password_level: 验证等级，默认为0 {3:"三种必须条件",2:"两种必须条件",3:"必须包含字母及数字",0:"不做验证"}
         :return:
         """
 
@@ -61,7 +61,7 @@ class StringRules(BaseModel):
                 RuleHandler.checkPassword(verified_str, keyword_list=keyword_list, startswith=startswith,
                                           endswith=endswith, min_length=min_length,
                                           max_length=max_length,
-                                          level=level)
+                                          password_level=password_level)
             return func(*args, *kwargs)
 
         return checkKeyword

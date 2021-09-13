@@ -37,7 +37,7 @@ class RuleHandler(BaseModel):
 
     @staticmethod
     def checkPassword(verified_str: str, keyword_list: List[str] = None, startswith: str = None, endswith: str = None,
-                      min_length: int = None, max_length: int = None, level: int = 3):
+                      min_length: int = None, max_length: int = None, password_level: int = 0):
 
         """
         验证密码通用方法
@@ -47,7 +47,7 @@ class RuleHandler(BaseModel):
         :param endswith: 以***结尾
         :param min_length: 最小长度
         :param max_length: 最大长度
-        :param level: 验证等级，默认为3 {3:"必须大小写字母数字以及特殊符号",2:"必须包含大小写字母及数字",3:"必须包含字母及数字",0:"不做验证"}
+        :param password_level: 验证等级，默认为0 {3:"三种必须条件",2:"两种必须条件",3:"必须包含字母及数字",0:"不做验证"}
         :return:
         """
         # 判断是否校验关键字
@@ -72,13 +72,13 @@ class RuleHandler(BaseModel):
             if not len(verified_str) <= max_length:
                 raise ValueError("{} length greater than maximum limit {}".format(verified_str, max_length))
         # 判断鉴定等级
-        if level != 0:
+        if password_level != 0:
             level_match = {
                 3: ReRuleMatch.highPasswordRule.getRuleStr,
                 2: ReRuleMatch.middlePasswordRule.getRuleStr,
                 1: ReRuleMatch.lowPasswordRule.getRuleStr
             }
-            res = re.search(level_match[level], verified_str)
+            res = re.search(level_match[password_level], verified_str)
             if res:
                 pass
             else:
