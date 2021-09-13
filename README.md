@@ -8,6 +8,7 @@
 
 例如：校验该字段是否是标准手机号
 ```python3
+from pydantic import BaseModel, Field, validator
 from validationRules.fieldRules import StringRules
 
 class TestUserBase(BaseModel):

@@ -1,8 +1,19 @@
-from pydantic import BaseModel
-from typing import List
-import re
+#!/usr/bin/env python
+# -*- coding:UTF-8 -*-
+"""
+@Project: validationRules
+@File: reRuleMatch.py
+@Author: Symoon
+@Date: 2021/9/13 下午1:51
+"""
+
 from functools import wraps
+from typing import List
+
+from pydantic import BaseModel
+
 from publicLib.structureFunc import doubleWrap
+from rulePackage.ruleHandler import RuleHandler
 
 
 class StringRules(BaseModel):
@@ -21,13 +32,7 @@ class StringRules(BaseModel):
             mobile_list: List[str] = []
             [mobile_list.append(str(mobile)) for mobile in args if type(mobile) == str or type(mobile) == int]
             for mobile in mobile_list:
-                if not mobile.isdigit():
-                    raise ValueError("[{}] mobile is not digit".format(mobile))
-                if len(mobile) != 11:
-                    raise ValueError("[{}] mobile is not 11 length".format(mobile))
-                reg = re.compile(r"(13\d|14[579]|15[^4\D]|17[^49\D]|18\d)\d{8}")
-                if not reg.match(mobile):
-                    raise ValueError("[{}] Incorrect mobile phone number".format(mobile))
+                RuleHandler.checkMobile(mobile)
             return func(*args, **kwargs)
 
         return checkMobile
@@ -51,16 +56,12 @@ class StringRules(BaseModel):
         @wraps(func)
         def checkKeyword(*args, **kwargs):
             verified_str_list = [str(verified_str) for verified_str in args if type(verified_str) == str]
-            level_match = {
-                3: r'^(?![A-Za-z0-9]+$)(?![a-z0-9\\W]+$)(?![A-Za-z\\W]+$)(?![A-Z0-9\\W]+$)^.{8,}$',
-                2:r''
-            }
+
             for verified_str in verified_str_list:
-                res = re.search(level_match[level], verified_str)
-                if res:
-                    pass
-                else:
-                    raise ValueError("[{}] string is not standard".format(verified_str))
+                RuleHandler.checkPassword(verified_str, keyword_list=keyword_list, startswith=startswith,
+                                          endswith=endswith, min_length=min_length,
+                                          max_length=max_length,
+                                          level=level)
             return func(*args, *kwargs)
 
         return checkKeyword
