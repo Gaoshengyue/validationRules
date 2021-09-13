@@ -31,3 +31,5 @@ class StringRules(BaseModel):
             return func(*args, **kwargs)
 
         return checkMobile
+
+
