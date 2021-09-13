@@ -36,7 +36,83 @@ class RuleHandler(BaseModel):
             raise ValueError("[{}] Incorrect mobile phone number".format(mobile))
 
     @staticmethod
-    def checkPassword(verified_str: str, keyword_list: List[str] = None, startswith: str = None, endswith: str = None,
+    def checkKeyWords(verified_str: str, keyword_list: List[str]):
+        """
+        检查是否包含关键字符
+        :param verified_str: 待验证字符串
+        :param keyword_list: 关键字符列表
+        :return:
+        """
+        not_found_keyword_list = [keyword for keyword in keyword_list if not verified_str.find(keyword) >= 0]
+        if not_found_keyword_list:
+            raise ValueError("【{}】not found in {}".format("、".join(not_found_keyword_list), verified_str))
+
+    @staticmethod
+    def checkStartSwitch(verified_str: str, startswith: str = None):
+        """
+        检查是否以**开头
+        :param verified_str: 待验证字符串
+        :param startswith: 开头关键字
+        :return:
+        """
+        if not verified_str.startswith(startswith):
+            raise ValueError("{} not startswith {}".format(verified_str, startswith))
+
+    @staticmethod
+    def checkEndSwitch(verified_str: str, endswith: str = None):
+        """
+        检查是否以**结尾
+        :param verified_str: 待验证字符串
+        :param endswith: 结尾关键字
+        :return:
+        """
+        if not verified_str.endswith(endswith):
+            raise ValueError("{} not endswith {}".format(verified_str, endswith))
+
+    @staticmethod
+    def checkMinLength(verified_str: str, min_length: int = None):
+        """
+        检查最小长度限制
+        :param verified_str: 待验证字符串
+        :param min_length: 最小长度参数
+        :return:
+        """
+        if not len(verified_str) >= min_length:
+            raise ValueError("{} length less than minimum limit {}".format(verified_str, min_length))
+
+    @staticmethod
+    def checkMaxLength(verified_str: str, max_length: int = None):
+        """
+        检查最大长度限制
+        :param verified_str: 待验证字符串
+        :param max_length: 最大长度参数
+        :return:
+        """
+        if not len(verified_str) <= max_length:
+            raise ValueError("{} length greater than maximum limit {}".format(verified_str, max_length))
+
+    @classmethod
+    def checkPasswordLevel(cls, verified_str: str, password_level: int = 0):
+        """
+        验证密码安全等级
+        :param verified_str: 待验证字符串
+        :param password_level: 安全等级
+        :return:
+        """
+        level_match = {
+            3: ReRuleMatch.highPasswordRule.getRuleStr,
+            2: ReRuleMatch.middlePasswordRule.getRuleStr,
+            1: ReRuleMatch.lowPasswordRule.getRuleStr
+        }
+        res = re.search(level_match[password_level], verified_str)
+        if res:
+            pass
+        else:
+            raise ValueError("[{}] string is not standard".format(verified_str))
+
+    @classmethod
+    def checkPassword(cls, verified_str: str, keyword_list: List[str] = None, startswith: str = None,
+                      endswith: str = None,
                       min_length: int = None, max_length: int = None, password_level: int = 0):
 
         """
@@ -52,34 +128,19 @@ class RuleHandler(BaseModel):
         """
         # 判断是否校验关键字
         if keyword_list:
-            not_found_keyword_list = [keyword for keyword in keyword_list if not verified_str.find(keyword) >= 0]
-            if not_found_keyword_list:
-                raise ValueError("【{}】not found in {}".format("、".join(not_found_keyword_list), verified_str))
+            cls.checkKeyWords(verified_str, keyword_list)
         # 判断是否校验开头
         if startswith:
-            if not verified_str.startswith(startswith):
-                raise ValueError("{} not startswith {}".format(verified_str, startswith))
+            cls.checkStartSwitch(verified_str, keyword_list)
         # 判断是否校验结尾
         if endswith:
-            if not verified_str.endswith(endswith):
-                raise ValueError("{} not endswith {}".format(verified_str, endswith))
+            cls.checkEndSwitch(verified_str, keyword_list)
         # 最小长度
         if min_length:
-            if not len(verified_str) >= min_length:
-                raise ValueError("{} length less than minimum limit {}".format(verified_str, min_length))
+            cls.checkMinLength(verified_str, min_length)
         # 最大长度
         if max_length:
-            if not len(verified_str) <= max_length:
-                raise ValueError("{} length greater than maximum limit {}".format(verified_str, max_length))
+            cls.checkMaxLength(verified_str, max_length)
         # 判断鉴定等级
         if password_level != 0:
-            level_match = {
-                3: ReRuleMatch.highPasswordRule.getRuleStr,
-                2: ReRuleMatch.middlePasswordRule.getRuleStr,
-                1: ReRuleMatch.lowPasswordRule.getRuleStr
-            }
-            res = re.search(level_match[password_level], verified_str)
-            if res:
-                pass
-            else:
-                raise ValueError("[{}] string is not standard".format(verified_str))
+            cls.checkPasswordLevel(verified_str, password_level)
