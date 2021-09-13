@@ -28,7 +28,7 @@ class ReRuleMatch(Enum):
     @property
     def getRuleNumber(self):
         """
-        根据美剧名称获取规则序号
+        根据枚举名称获取规则序号
         :return:
         """
         return list(self.value.keys())[0]
@@ -36,7 +36,7 @@ class ReRuleMatch(Enum):
     @property
     def getRuleStr(self):
         """
-        根据美剧名称获取规则语句
+        根据枚举名称获取规则语句
         :return: 状态说明message
         """
         return list(self.value.values())[0]
