@@ -50,9 +50,33 @@ class RuleHandler(BaseModel):
         :param level: 验证等级，默认为3 {3:"必须大小写字母数字以及特殊符号",2:"必须包含大小写字母及数字",3:"必须包含字母及数字",0:"不做验证"}
         :return:
         """
+        # 判断是否校验关键字
+        if keyword_list:
+            not_found_keyword_list = [keyword for keyword in keyword_list if not verified_str.find(keyword) >= 0]
+            if not_found_keyword_list:
+                raise ValueError("【{}】not found in {}".format("、".join(not_found_keyword_list), verified_str))
+        # 判断是否校验开头
+        if startswith:
+            if not verified_str.startswith(startswith):
+                raise ValueError("{} not startswith {}".format(verified_str, startswith))
+        # 判断是否校验结尾
+        if endswith:
+            if not verified_str.endswith(endswith):
+                raise ValueError("{} not endswith {}".format(verified_str, endswith))
+        # 最小长度
+        if min_length:
+            if not len(verified_str) >= min_length:
+                raise ValueError("{} length less than minimum limit {}".format(verified_str, min_length))
+        # 最大长度
+        if max_length:
+            if not len(verified_str) <= max_length:
+                raise ValueError("{} length greater than maximum limit {}".format(verified_str, max_length))
+        # 判断鉴定等级
         if level != 0:
             level_match = {
                 3: ReRuleMatch.highPasswordRule.getRuleStr,
+                2: ReRuleMatch.middlePasswordRule.getRuleStr,
+                1: ReRuleMatch.lowPasswordRule.getRuleStr
             }
             res = re.search(level_match[level], verified_str)
             if res:
