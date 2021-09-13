@@ -2,17 +2,7 @@ from pydantic import BaseModel
 from typing import List
 import re
 from functools import wraps
-
-
-def doubleWrap(f):
-    @wraps(f)
-    def new_dec(*args, **kwargs):
-        if len(args) == 1 and len(kwargs) == 0 and callable(args[0]):
-            return f(args[0])
-        else:
-            return lambda real_func: f(real_func, *args, **kwargs)
-
-    return new_dec
+from publicLib.structureFunc import doubleWrap
 
 
 class StringRules(BaseModel):
@@ -23,12 +13,13 @@ class StringRules(BaseModel):
         """
         标准手机号校验
         func:被装饰check函数
+        comment:支持数字类型手机号。但一般不推荐用数字存储手机号
         """
 
         @wraps(func)
         def checkMobile(*args, **kwargs):
             mobile_list: List[str] = []
-            [mobile_list.append(str(mobile)) for mobile in args]
+            [mobile_list.append(str(mobile)) for mobile in args if type(mobile) == str or type(mobile) == int]
             for mobile in mobile_list:
                 if not mobile.isdigit():
                     raise ValueError("[{}] mobile is not digit".format(mobile))
@@ -40,4 +31,3 @@ class StringRules(BaseModel):
             return func(*args, **kwargs)
 
         return checkMobile
-
