@@ -20,7 +20,7 @@ setup(
     author="Symoon",
     author_email="symoon.gao@gmail.com",
     url="https://github.com/Gaoshengyue/validationRules",
-    download_url="https://github.com/Gaoshengyue/validationRules/releases/tag/0.1.0",
+    download_url="https://github.com/Gaoshengyue/validationRules/releases/tag/v0.1.0",
     keywords=["python-validation-rules", "validation-rules"],
     license="MIT",
     classifiers=[
