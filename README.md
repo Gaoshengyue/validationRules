@@ -4,6 +4,10 @@
 ## 前置
 需要配合pydantic的validator使用
 
+## Install
+
+`pip install python-validation-rules==0.1.0`
+
 ## 使用方式
 
 例如：校验该字段是否是标准手机号

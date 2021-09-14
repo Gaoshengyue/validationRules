@@ -25,7 +25,7 @@ setup(
     license="MIT",
     classifiers=[
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python 3",
+        "Programming Language :: Python",
         "Intended Audience :: Developers",
         "Operating System :: OS Independent"
 
