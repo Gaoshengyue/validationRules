@@ -20,6 +20,33 @@ class StringRules(BaseModel):
 
     @staticmethod
     @doubleWrap
+    def accountRule(func, required: bool = False):
+        """
+        账号合法校验
+        :param func:
+        :param required: 是否必填
+        :return:
+        """
+
+        @wraps(func)
+        def checkAccount(*args, **kwargs):
+            """
+            校验账号合法
+            :param args:
+            :param kwargs:
+            :return:
+            """
+            account_list: List[str] = [str(account) for account in args if type(account) == str]
+            if required and not account_list:
+                raise ValueError("{} is not allowed value,check input".format(account_list))
+            for account_str in account_list:
+                RuleHandler.checkAccount(account_str)
+            return func(*args, **kwargs)
+
+        return checkAccount
+
+    @staticmethod
+    @doubleWrap
     def mobileRule(func, required: bool = False):
         """
         标准手机号校验
@@ -30,12 +57,18 @@ class StringRules(BaseModel):
 
         @wraps(func)
         def checkMobile(*args, **kwargs):
-            mobile_list: List[str] = [str(mobile) for mobile in args if type(mobile) == str or type(mobile) == int]
-            if required and not mobile_list:
-                raise ValueError("{} is not allowed value,check input".format(mobile_list))
+            """
+            校验手机号
+            :param args:
+            :param kwargs:
+            :return:
+            """
+            mobile_str_list: List[str] = [str(mobile) for mobile in args if type(mobile) == str or type(mobile) == int]
+            if required and not mobile_str_list:
+                raise ValueError("{} is not allowed value,check input".format(mobile_str_list))
 
-            for mobile in mobile_list:
-                RuleHandler.checkMobile(mobile)
+            for mobile_str in mobile_str_list:
+                RuleHandler.checkMobile(mobile_str)
             return func(*args, **kwargs)
 
         return checkMobile

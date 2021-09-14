@@ -32,6 +32,9 @@ class ReRuleMatch(Enum):
     # 标准身份证号校验规则
     idRule = {"0006": r"(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)"}
 
+    # 校验账号规则
+    accountRule = {"0007": r"^[a-zA-Z][a-zA-Z0-9_]{4,15}$"}
+
     @property
     def getRuleNumber(self):
         """

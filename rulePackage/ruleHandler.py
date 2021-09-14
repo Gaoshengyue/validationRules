@@ -21,6 +21,19 @@ class RuleHandler(BaseModel):
     """
 
     @staticmethod
+    def checkAccount(account_str: str):
+        """
+        校验账号通用方法
+        :param account_str: 账号字符串
+        :return:
+        """
+        res = re.match(ReRuleMatch.accountRule.getRuleStr, account_str)
+        if res:
+            pass
+        else:
+            raise ValueError("[{}] string is not an standard account".format(account_str))
+
+    @staticmethod
     def checkMobile(mobile: str):
         """
         校验手机号通用方法
@@ -156,7 +169,7 @@ class RuleHandler(BaseModel):
         if res:
             pass
         else:
-            raise ValueError("[{}] string is not an email".format(email_str))
+            raise ValueError("[{}] string is not an standard email".format(email_str))
 
     @staticmethod
     def checkIDCard(id_str: str):
@@ -169,4 +182,4 @@ class RuleHandler(BaseModel):
         if res:
             pass
         else:
-            raise ValueError("[{}] string is not an idCard".format(id_str))
+            raise ValueError("[{}] string is not an standard idCard".format(id_str))
