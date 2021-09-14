@@ -91,8 +91,8 @@ class RuleHandler(BaseModel):
         if not len(verified_str) <= max_length:
             raise ValueError("{} length greater than maximum limit {}".format(verified_str, max_length))
 
-    @classmethod
-    def checkPasswordLevel(cls, verified_str: str, password_level: int = 0):
+    @staticmethod
+    def checkPasswordLevel(verified_str: str, password_level: int = 0):
         """
         验证密码安全等级
         :param verified_str: 待验证字符串
@@ -144,3 +144,11 @@ class RuleHandler(BaseModel):
         # 判断鉴定等级
         if password_level != 0:
             cls.checkPasswordLevel(verified_str, password_level)
+
+    @staticmethod
+    def checkEmail(email_str: str):
+        res = re.match(ReRuleMatch.emailRule.getRuleStr, email_str)
+        if res:
+            pass
+        else:
+            raise ValueError("[{}] string is not an email".format(email_str))

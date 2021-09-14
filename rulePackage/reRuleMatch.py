@@ -12,6 +12,7 @@ from enum import Enum, unique
 
 @unique
 class ReRuleMatch(Enum):
+    # 标准手机号校验规则
     mobileRule = {"0001": r"(13\d|14[579]|15[^4\D]|17[^49\D]|18\d)\d{8}"}
     # 满足三种条件  大小写字母数字或者符号
     highPasswordRule = {
@@ -24,6 +25,9 @@ class ReRuleMatch(Enum):
     # 满足数字加字母
     lowPasswordRule = {
         "0004": r"^(?=.*\d)(?=.*[a-z]).*$"}
+
+    # 标准邮箱校验规则
+    emailRule = {"0005": r"^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$"}
 
     @property
     def getRuleNumber(self):
