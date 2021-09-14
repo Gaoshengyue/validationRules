@@ -93,3 +93,24 @@ class StringRules(BaseModel):
             return func(*args, **kwargs)
 
         return checkEmail
+
+    @staticmethod
+    @doubleWrap
+    def IDCardRule(func, required: bool = False):
+        """
+        身份证号校验
+        :param func:
+        :param required: 是否必填
+        :return:
+        """
+
+        @wraps(func)
+        def checkIDCard(*args, **kwargs):
+            id_str_list = [str(id_str) for id_str in args if type(id_str) == str]
+            if required and not id_str_list:
+                raise ValueError("{} is not allowed value,check input".format(id_str_list))
+            for id_str in id_str_list:
+                RuleHandler.checkIDCard(id_str)
+            return func(*args, **kwargs)
+
+        return checkIDCard

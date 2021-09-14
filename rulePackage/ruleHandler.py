@@ -147,8 +147,26 @@ class RuleHandler(BaseModel):
 
     @staticmethod
     def checkEmail(email_str: str):
+        """
+        检查是否标准邮箱
+        :param email_str: 邮箱字符串
+        :return:
+        """
         res = re.match(ReRuleMatch.emailRule.getRuleStr, email_str)
         if res:
             pass
         else:
             raise ValueError("[{}] string is not an email".format(email_str))
+
+    @staticmethod
+    def checkIDCard(id_str: str):
+        """
+        检查是否标准身份证号
+        :param id_str: 身份证号字符串
+        :return:
+        """
+        res = re.match(ReRuleMatch.idRule.getRuleStr, id_str)
+        if res:
+            pass
+        else:
+            raise ValueError("[{}] string is not an idCard".format(id_str))

@@ -29,6 +29,9 @@ class ReRuleMatch(Enum):
     # 标准邮箱校验规则
     emailRule = {"0005": r"^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$"}
 
+    # 标准身份证号校验规则
+    idRule = {"0006": r"(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)"}
+
     @property
     def getRuleNumber(self):
         """
