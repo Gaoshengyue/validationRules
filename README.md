@@ -37,7 +37,10 @@ print(user_obj)
 user_obj: TestUserBase = TestUserBase(
 
     user_name="symoon",
-    mobile_number="132326331231"
+    mobile_number="13232633123",
+    password="gsy121994",
+    email="fsdfsfsf@qq.com",
+    id_card="130"
 )
 
 # [132326331231] mobile is not 11 length (type=value_error)
