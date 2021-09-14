@@ -139,6 +139,12 @@ class StringRules(BaseModel):
 
         @wraps(func)
         def checkIDCard(*args, **kwargs):
+            """
+            校验身份证号
+            :param args:
+            :param kwargs:
+            :return:
+            """
             id_str_list = [str(id_str) for id_str in args if type(id_str) == str]
             if required and not id_str_list:
                 raise ValueError("{} is not allowed value,check input".format(id_str_list))
