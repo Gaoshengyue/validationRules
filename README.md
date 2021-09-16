@@ -79,10 +79,22 @@ print(user_obj)
 #### accountRule:账号校验
 
 标准账号校验方法
+`    
+    @validator("userName")
+    @StringRules.accountRule
+    def check_account(cls, column):
+        return column
+        `
 
 #### mobileRule:手机号校验
 
 手机号校验
+`
+    @validator("mobileNumber")
+    @StringRules.mobileRule
+    def check_mobile_number(cls, column):
+        return column
+`
 
 #### keywordCheckRule:关键字符校验(密码校验)
 
@@ -95,9 +107,28 @@ print(user_obj)
 | max_length     | int       | 校验最大长度                                                 |
 | password_level | int       | 验证等级，默认为0 {3:"三种必须条件",2:"两种必须条件",3:"必须包含字母及数字",0:"不做验证"} |
 
+`
+    @validator("password")
+    @StringRules.keywordCheckRule(password_level=1, min_length=8)
+    def check_keyword(cls, column):
+        return column
+`
 #### emailRule:邮箱校验
 
 邮箱校验
+`
+    @validator("email")
+    @StringRules.emailRule(required=True)
+    def check_email(cls, column):
+        return column
+`
 #### IDCardRule:身份证校验
 
-身份证及啊哟安
+身份证校验
+
+`
+    @validator("IDCard")
+    @StringRules.IDCardRule(required=True)
+    def check_id_card(cls, column):
+        return column
+`
