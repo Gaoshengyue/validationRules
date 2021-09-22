@@ -31,7 +31,7 @@ class RuleHandler(BaseModel):
         if res:
             pass
         else:
-            raise ValueError("[{}] string is not an standard account".format(account_str))
+            raise ValueError("[{}] 非标准账号，需要包含英文+数字或纯英文".format(account_str))
 
     @staticmethod
     def checkMobile(mobile: str):
@@ -41,12 +41,12 @@ class RuleHandler(BaseModel):
         :return:
         """
         if not mobile.isdigit():
-            raise ValueError("[{}] mobile is not digit".format(mobile))
+            raise ValueError("[{}] 手机号非纯数字输入".format(mobile))
         if len(mobile) != 11:
-            raise ValueError("[{}] mobile is not 11 length".format(mobile))
+            raise ValueError("[{}] 手机号长度不足11位".format(mobile))
         reg = re.compile(ReRuleMatch.mobileRule.getRuleStr)
         if not reg.match(mobile):
-            raise ValueError("[{}] Incorrect mobile phone number".format(mobile))
+            raise ValueError("[{}] {}".format(mobile,ReRuleMatch.mobileRule.getRuleErrorMsg))
 
     @staticmethod
     def checkKeyWords(verified_str: str, keyword_list: List[str]):
@@ -58,7 +58,7 @@ class RuleHandler(BaseModel):
         """
         not_found_keyword_list = [keyword for keyword in keyword_list if not verified_str.find(keyword) >= 0]
         if not_found_keyword_list:
-            raise ValueError("【{}】not found in {}".format("、".join(not_found_keyword_list), verified_str))
+            raise ValueError("【{}】中找不到关键词 {}".format("、".join(not_found_keyword_list), verified_str))
 
     @staticmethod
     def checkStartSwitch(verified_str: str, startswith: str = None):
@@ -69,7 +69,7 @@ class RuleHandler(BaseModel):
         :return:
         """
         if not verified_str.startswith(startswith):
-            raise ValueError("{} not startswith {}".format(verified_str, startswith))
+            raise ValueError("【{}】 不是以 {} 为开头".format(verified_str, startswith))
 
     @staticmethod
     def checkEndSwitch(verified_str: str, endswith: str = None):
@@ -80,7 +80,7 @@ class RuleHandler(BaseModel):
         :return:
         """
         if not verified_str.endswith(endswith):
-            raise ValueError("{} not endswith {}".format(verified_str, endswith))
+            raise ValueError("【{}】 不是以 {} 为结尾".format(verified_str, endswith))
 
     @staticmethod
     def checkMinLength(verified_str: str, min_length: int = None):
@@ -91,7 +91,7 @@ class RuleHandler(BaseModel):
         :return:
         """
         if not len(verified_str) >= min_length:
-            raise ValueError("{} length less than minimum limit {}".format(verified_str, min_length))
+            raise ValueError("【{}】 长度小于 {} 位最小长度限制".format(verified_str, min_length))
 
     @staticmethod
     def checkMaxLength(verified_str: str, max_length: int = None):
@@ -102,7 +102,7 @@ class RuleHandler(BaseModel):
         :return:
         """
         if not len(verified_str) <= max_length:
-            raise ValueError("{} length greater than maximum limit {}".format(verified_str, max_length))
+            raise ValueError("【{}】 长度大于 {} 位最大长度限制".format(verified_str, max_length))
 
     @staticmethod
     def checkPasswordLevel(verified_str: str, password_level: int = 0):
@@ -113,15 +113,15 @@ class RuleHandler(BaseModel):
         :return:
         """
         level_match = {
-            3: ReRuleMatch.highPasswordRule.getRuleStr,
-            2: ReRuleMatch.middlePasswordRule.getRuleStr,
+            3: ReRuleMatch.highPasswordRule,
+            2: ReRuleMatch.middlePasswordRule,
             1: ReRuleMatch.lowPasswordRule.getRuleStr
         }
-        res = re.search(level_match[password_level], verified_str)
+        res = re.search(level_match[password_level].getRuleStr, verified_str)
         if res:
             pass
         else:
-            raise ValueError("[{}] string is not standard".format(verified_str))
+            raise ValueError("[{}] {}".format(verified_str,level_match[password_level].getRuleErrorMsg))
 
     @classmethod
     def checkPassword(cls, verified_str: str, keyword_list: List[str] = None, startswith: str = None,
@@ -169,7 +169,7 @@ class RuleHandler(BaseModel):
         if res:
             pass
         else:
-            raise ValueError("[{}] string is not an standard email".format(email_str))
+            raise ValueError("[{}] {}".format(email_str,ReRuleMatch.emailRule))
 
     @staticmethod
     def checkIDCard(id_str: str):
@@ -182,4 +182,4 @@ class RuleHandler(BaseModel):
         if res:
             pass
         else:
-            raise ValueError("[{}] string is not an standard idCard".format(id_str))
+            raise ValueError("[{}] {}".format(id_str,ReRuleMatch.idRule.getRuleErrorMsg))
