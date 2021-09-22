@@ -14,13 +14,13 @@ with open("README.md", encoding="utf-8") as f:
 setup(
     name="python-validation-rules",
     packages=["validationRules"],
-    version="0.1.10",
+    version="0.1.11",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Symoon",
     author_email="symoon.gao@gmail.com",
     url="https://github.com/Gaoshengyue/validationRules",
-    download_url="https://github.com/Gaoshengyue/validationRules/releases/tag/v0.1.10",
+    download_url="https://github.com/Gaoshengyue/validationRules/releases/tag/v0.1.11",
     keywords=["python-validation-rules", "validation-rules"],
     license="MIT",
     classifiers=[
