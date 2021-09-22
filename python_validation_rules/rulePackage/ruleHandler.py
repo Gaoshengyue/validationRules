@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:UTF-8 -*-
 """
-@Project: validationRules
+@Project: rulesHandler
 @File: ruleHandler.py
 @Author: Symoon
 @Date: 2021/9/13 下午2:36
@@ -12,7 +12,7 @@ from typing import List
 
 from pydantic import BaseModel
 
-from .reRuleMatch import ReRuleMatch
+from python_validation_rules.rulePackage.reRuleMatch import ReRuleMatch
 
 
 class RuleHandler(BaseModel):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:UTF-8 -*-
 """
-@Project: validationRules
+@Project: rulesHandler
 @File: reRuleMatch.py
 @Author: Symoon
 @Date: 2021/9/13 下午1:51

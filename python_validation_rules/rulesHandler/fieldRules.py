@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:UTF-8 -*-
 """
-@Project: validationRules
+@Project: rulesHandler
 @File: reRuleMatch.py
 @Author: Symoon
 @Date: 2021/9/13 下午1:51
@@ -12,8 +12,8 @@ from typing import List
 
 from pydantic import BaseModel
 
-from ..publicLib.structureFunc import doubleWrap
-from ..rulePackage.ruleHandler import RuleHandler
+from python_validation_rules.publicLib.structureFunc import doubleWrap
+from python_validation_rules.rulePackage.ruleHandler import RuleHandler
 
 
 class StringRules(BaseModel):
