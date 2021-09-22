@@ -14,7 +14,7 @@ with open("README.md", encoding="utf-8") as f:
 setup(
     name="python-validation-rules",
     packages=["validationRules"],
-    version="0.1.0",
+    version="0.1.10",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Symoon",
@@ -29,5 +29,5 @@ setup(
         "Intended Audience :: Developers",
         "Operating System :: OS Independent"
 
-    ], install_requires=['pydantic >=1.8.2']
+    ], install_requires=['pydantic >=1.5.1']
 )
