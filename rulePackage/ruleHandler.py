@@ -12,7 +12,7 @@ from typing import List
 
 from pydantic import BaseModel
 
-from rulePackage.reRuleMatch import ReRuleMatch
+from .reRuleMatch import ReRuleMatch
 
 
 class RuleHandler(BaseModel):
