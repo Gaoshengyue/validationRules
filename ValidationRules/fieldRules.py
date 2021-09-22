@@ -12,8 +12,8 @@ from typing import List
 
 from pydantic import BaseModel
 
-from ValidationRules.publicLib.structureFunc import doubleWrap
-from ValidationRules.rulePackage.ruleHandler import RuleHandler
+from ValidationRules.structureFunc import doubleWrap
+from ValidationRules.ruleHandler import RuleHandler
 
 
 class StringRules(BaseModel):
