@@ -21,9 +21,11 @@ class RuleHandler(BaseModel):
     """
 
     @staticmethod
-    def checkAccount(account_str: str):
+    def checkAccount(account_str: str, label: str = "", error_msg: str = ""):
         """
         校验账号通用方法
+        :param error_msg: 错误信息
+        :param label: 标签主题
         :param account_str: 账号字符串
         :return:
         """
@@ -31,83 +33,115 @@ class RuleHandler(BaseModel):
         if res:
             pass
         else:
-            raise ValueError("[{}] 非标准账号，需要包含英文+数字或纯英文".format(account_str))
+            if error_msg:
+                raise ValueError(error_msg)
+            raise ValueError("【{}】 输入值 【{}】 非标准账号，需要包含英文+数字或纯英文".format(label, account_str))
 
     @staticmethod
-    def checkMobile(mobile: str):
+    def checkMobile(mobile: str, label: str = "", error_msg: str = ""):
         """
         校验手机号通用方法
+        :param error_msg: 错误信息
+        :param label: 标签主题
         :param mobile: 手机号str
         :return:
         """
         if not mobile.isdigit():
-            raise ValueError("[{}] 手机号非纯数字输入".format(mobile))
+            if error_msg:
+                raise ValueError(error_msg)
+            raise ValueError("【{}】 输入值 【{}】 手机号非纯数字输入".format(label,mobile))
         if len(mobile) != 11:
-            raise ValueError("[{}] 手机号长度不足11位".format(mobile))
+            if error_msg:
+                raise ValueError(error_msg)
+            raise ValueError("【{}】 输入值 【{}】 手机号长度不足11位".format(label,mobile))
         reg = re.compile(ReRuleMatch.mobileRule.getRuleStr)
         if not reg.match(mobile):
-            raise ValueError("[{}] {}".format(mobile,ReRuleMatch.mobileRule.getRuleErrorMsg))
+            if error_msg:
+                raise ValueError(error_msg)
+            raise ValueError("【{}】 输入值 【{}】 {}".format(label,mobile, ReRuleMatch.mobileRule.getRuleErrorMsg))
 
     @staticmethod
-    def checkKeyWords(verified_str: str, keyword_list: List[str]):
+    def checkKeyWords(verified_str: str, keyword_list: List[str], label: str = "", error_msg: str = ""):
         """
         检查是否包含关键字符
+        :param error_msg: 错误信息
+        :param label: 标签主题
         :param verified_str: 待验证字符串
         :param keyword_list: 关键字符列表
         :return:
         """
         not_found_keyword_list = [keyword for keyword in keyword_list if not verified_str.find(keyword) >= 0]
         if not_found_keyword_list:
-            raise ValueError("【{}】中找不到关键词 {}".format("、".join(not_found_keyword_list), verified_str))
+            if error_msg:
+                raise ValueError(error_msg)
+            raise ValueError("【{}】 输入值【{}】中找不到关键词 {}".format(label,"、".join(not_found_keyword_list), verified_str))
 
     @staticmethod
-    def checkStartSwitch(verified_str: str, startswith: str = None):
+    def checkStartSwitch(verified_str: str, startswith: str = None, label: str = "", error_msg: str = ""):
         """
         检查是否以**开头
+        :param error_msg: 错误信息
+        :param label: 标签主题
         :param verified_str: 待验证字符串
         :param startswith: 开头关键字
         :return:
         """
         if not verified_str.startswith(startswith):
-            raise ValueError("【{}】 不是以 {} 为开头".format(verified_str, startswith))
+            if error_msg:
+                raise ValueError(error_msg)
+            raise ValueError("【{}】 输入值【{}】 不是以 {} 为开头".format(label,verified_str, startswith))
 
     @staticmethod
-    def checkEndSwitch(verified_str: str, endswith: str = None):
+    def checkEndSwitch(verified_str: str, endswith: str = None, label: str = "", error_msg: str = ""):
         """
         检查是否以**结尾
+        :param error_msg: 错误信息
+        :param label: 标签主题
         :param verified_str: 待验证字符串
         :param endswith: 结尾关键字
         :return:
         """
         if not verified_str.endswith(endswith):
-            raise ValueError("【{}】 不是以 {} 为结尾".format(verified_str, endswith))
+            if error_msg:
+                raise ValueError(error_msg)
+            raise ValueError("【{}】 输入值【{}】 不是以 {} 为结尾".format(label,verified_str, endswith))
 
     @staticmethod
-    def checkMinLength(verified_str: str, min_length: int = None):
+    def checkMinLength(verified_str: str, min_length: int = None, label: str = "", error_msg: str = ""):
         """
         检查最小长度限制
+        :param error_msg: 错误信息
+        :param label: 标签主题
         :param verified_str: 待验证字符串
         :param min_length: 最小长度参数
         :return:
         """
         if not len(verified_str) >= min_length:
-            raise ValueError("【{}】 长度小于 {} 位最小长度限制".format(verified_str, min_length))
+            if error_msg:
+                raise ValueError(error_msg)
+            raise ValueError("【{}】 输入值【{}】 长度小于 {} 位最小长度限制".format(label,verified_str, min_length))
 
     @staticmethod
-    def checkMaxLength(verified_str: str, max_length: int = None):
+    def checkMaxLength(verified_str: str, max_length: int = None, label: str = "", error_msg: str = ""):
         """
         检查最大长度限制
+        :param error_msg: 错误信息
+        :param label: 标签主题
         :param verified_str: 待验证字符串
         :param max_length: 最大长度参数
         :return:
         """
         if not len(verified_str) <= max_length:
-            raise ValueError("【{}】 长度大于 {} 位最大长度限制".format(verified_str, max_length))
+            if error_msg:
+                raise ValueError(error_msg)
+            raise ValueError("【{}】 输入值【{}】 长度大于 {} 位最大长度限制".format(label,verified_str, max_length))
 
     @staticmethod
-    def checkPasswordLevel(verified_str: str, password_level: int = 0):
+    def checkPasswordLevel(verified_str: str, password_level: int = 0, label: str = "", error_msg: str = ""):
         """
         验证密码安全等级
+        :param error_msg: 错误信息
+        :param label: 标签主题
         :param verified_str: 待验证字符串
         :param password_level: 安全等级
         :return:
@@ -115,21 +149,26 @@ class RuleHandler(BaseModel):
         level_match = {
             3: ReRuleMatch.highPasswordRule,
             2: ReRuleMatch.middlePasswordRule,
-            1: ReRuleMatch.lowPasswordRule.getRuleStr
+            1: ReRuleMatch.lowPasswordRule
         }
         res = re.search(level_match[password_level].getRuleStr, verified_str)
         if res:
             pass
         else:
-            raise ValueError("[{}] {}".format(verified_str,level_match[password_level].getRuleErrorMsg))
+            if error_msg:
+                raise ValueError(error_msg)
+            raise ValueError("【{}】 输入值 【{}】 {}".format(label,verified_str, level_match[password_level].getRuleErrorMsg))
 
     @classmethod
     def checkPassword(cls, verified_str: str, keyword_list: List[str] = None, startswith: str = None,
                       endswith: str = None,
-                      min_length: int = None, max_length: int = None, password_level: int = 0):
+                      min_length: int = None, max_length: int = None, password_level: int = 0, label: str = "",
+                      error_msg: str = ""):
 
         """
         验证密码通用方法
+        :param error_msg: 错误信息
+        :param label: 标签主题
         :param verified_str: 待验证字符串
         :param keyword_list: 需要验证的关键字列表
         :param startswith: 以***开头
@@ -141,27 +180,29 @@ class RuleHandler(BaseModel):
         """
         # 判断是否校验关键字
         if keyword_list:
-            cls.checkKeyWords(verified_str, keyword_list)
+            cls.checkKeyWords(verified_str, keyword_list,label,error_msg)
         # 判断是否校验开头
         if startswith:
-            cls.checkStartSwitch(verified_str, keyword_list)
+            cls.checkStartSwitch(verified_str, keyword_list,label,error_msg)
         # 判断是否校验结尾
         if endswith:
-            cls.checkEndSwitch(verified_str, keyword_list)
+            cls.checkEndSwitch(verified_str, keyword_list,label,error_msg)
         # 最小长度
         if min_length:
-            cls.checkMinLength(verified_str, min_length)
+            cls.checkMinLength(verified_str, min_length,label,error_msg)
         # 最大长度
         if max_length:
-            cls.checkMaxLength(verified_str, max_length)
+            cls.checkMaxLength(verified_str, max_length,label,error_msg)
         # 判断鉴定等级
         if password_level != 0:
-            cls.checkPasswordLevel(verified_str, password_level)
+            cls.checkPasswordLevel(verified_str, password_level,label,error_msg)
 
     @staticmethod
-    def checkEmail(email_str: str):
+    def checkEmail(email_str: str, label: str = "", error_msg: str = ""):
         """
         检查是否标准邮箱
+        :param error_msg: 错误信息
+        :param label: 标签主题
         :param email_str: 邮箱字符串
         :return:
         """
@@ -169,12 +210,16 @@ class RuleHandler(BaseModel):
         if res:
             pass
         else:
-            raise ValueError("[{}] {}".format(email_str,ReRuleMatch.emailRule))
+            if error_msg:
+                raise ValueError(error_msg)
+            raise ValueError("【{}】 输入值 【{}】 {}".format(label,email_str, ReRuleMatch.emailRule))
 
     @staticmethod
-    def checkIDCard(id_str: str):
+    def checkIDCard(id_str: str, label: str = "", error_msg: str = ""):
         """
         检查是否标准身份证号
+        :param error_msg: 错误信息
+        :param label: 标签主题
         :param id_str: 身份证号字符串
         :return:
         """
@@ -182,4 +227,6 @@ class RuleHandler(BaseModel):
         if res:
             pass
         else:
-            raise ValueError("[{}] {}".format(id_str,ReRuleMatch.idRule.getRuleErrorMsg))
+            if error_msg:
+                raise ValueError(error_msg)
+            raise ValueError("【{}】 输入值【{}】 {}".format(label,id_str, ReRuleMatch.idRule.getRuleErrorMsg))

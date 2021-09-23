@@ -12,17 +12,19 @@ from typing import List
 
 from pydantic import BaseModel
 
-from ValidationRules.structureFunc import doubleWrap
 from ValidationRules.ruleHandler import RuleHandler
+from ValidationRules.structureFunc import doubleWrap
 
 
 class StringRules(BaseModel):
 
     @staticmethod
     @doubleWrap
-    def accountRule(func, required: bool = False):
+    def accountRule(func, required: bool = False, label: str = "账号", error_msg: str = ""):
         """
         账号合法校验
+        :param error_msg: 错误信息自定义，默认空
+        :param label: 标签，错误主题名称
         :param func:
         :param required: 是否必填
         :return:
@@ -38,18 +40,20 @@ class StringRules(BaseModel):
             """
             account_list: List[str] = [str(account) for account in args if type(account) == str]
             if required and not account_list:
-                raise ValueError("{} is not allowed value,check input".format(account_list))
+                raise ValueError("label {} value {} is not allowed value,check input".format(label,account_list))
             for account_str in account_list:
-                RuleHandler.checkAccount(account_str)
+                RuleHandler.checkAccount(account_str,label=label,error_msg=error_msg)
             return func(*args, **kwargs)
 
         return checkAccount
 
     @staticmethod
     @doubleWrap
-    def mobileRule(func, required: bool = False):
+    def mobileRule(func, required: bool = False, label: str = "手机号",error_msg: str = ""):
         """
         标准手机号校验
+        :param error_msg: 错误信息自定义，默认空
+        :param label: 标签，错误主题名称
         :param func:被装饰check函数
         comment:支持数字类型手机号。但一般不推荐用数字存储手机号
         :param required: 是否必填
@@ -65,10 +69,10 @@ class StringRules(BaseModel):
             """
             mobile_str_list: List[str] = [str(mobile) for mobile in args if type(mobile) == str or type(mobile) == int]
             if required and not mobile_str_list:
-                raise ValueError("{} is not allowed value,check input".format(mobile_str_list))
+                raise ValueError("label {} value {} is not allowed value,check input".format(label,mobile_str_list))
 
             for mobile_str in mobile_str_list:
-                RuleHandler.checkMobile(mobile_str)
+                RuleHandler.checkMobile(mobile_str,label=label,error_msg=error_msg)
             return func(*args, **kwargs)
 
         return checkMobile
@@ -77,9 +81,11 @@ class StringRules(BaseModel):
     @doubleWrap
     def keywordCheckRule(func, keyword_list: List[str] = None, startswith: str = None, endswith: str = None,
                          min_length: int = None, max_length: int = None, password_level: int = 0,
-                         required: bool = False):
+                         required: bool = False, label: str = "字符",error_msg: str = ""):
         """
         输入字符验证
+        :param error_msg: 错误信息自定义，默认空
+        :param label: 标签，错误主题名称
         :param func: 被装饰check函数
         :param keyword_list: 关键字列表
         :param startswith: 以***为开头
@@ -95,22 +101,23 @@ class StringRules(BaseModel):
         def checkKeyword(*args, **kwargs):
             verified_str_list: List[str] = [str(verified_str) for verified_str in args if type(verified_str) == str]
             if required and not verified_str_list:
-                raise ValueError("{} is not allowed value,check input".format(verified_str_list))
+                raise ValueError("label {} value {} is not allowed value,check input".format(label,verified_str_list))
             for verified_str in verified_str_list:
                 RuleHandler.checkPassword(verified_str, keyword_list=keyword_list, startswith=startswith,
                                           endswith=endswith, min_length=min_length,
                                           max_length=max_length,
-                                          password_level=password_level)
+                                          password_level=password_level,label=label,error_msg=error_msg)
             return func(*args, *kwargs)
 
         return checkKeyword
 
     @staticmethod
     @doubleWrap
-    def emailRule(func, required: bool = False):
+    def emailRule(func, required: bool = False, label: str = "邮箱",error_msg: str = None):
         """
         标准邮箱校验
-
+        :param error_msg: 错误信息自定义，默认空
+        :param label: 标签，错误主题名称
         :param func:
         :param required: 是否必填
         :return:
@@ -120,18 +127,20 @@ class StringRules(BaseModel):
         def checkEmail(*args, **kwargs):
             email_str_list = [str(email_str) for email_str in args if type(email_str) == str]
             if required and not email_str_list:
-                raise ValueError("{} is not allowed value,check input".format(email_str_list))
+                raise ValueError("label {} value {} is not allowed value,check input".format(label,email_str_list))
             for email_str in email_str_list:
-                RuleHandler.checkEmail(email_str)
+                RuleHandler.checkEmail(email_str,label=label,error_msg=error_msg)
             return func(*args, **kwargs)
 
         return checkEmail
 
     @staticmethod
     @doubleWrap
-    def IDCardRule(func, required: bool = False):
+    def IDCardRule(func, required: bool = False, label: str = "身份证",error_msg: str = None):
         """
         身份证号校验
+        :param error_msg: 错误信息自定义，默认空
+        :param label: 标签，错误主题名称
         :param func:
         :param required: 是否必填
         :return:
@@ -147,9 +156,9 @@ class StringRules(BaseModel):
             """
             id_str_list = [str(id_str) for id_str in args if type(id_str) == str]
             if required and not id_str_list:
-                raise ValueError("{} is not allowed value,check input".format(id_str_list))
+                raise ValueError("label {} value {} is not allowed value,check input".format(label,id_str_list))
             for id_str in id_str_list:
-                RuleHandler.checkIDCard(id_str)
+                RuleHandler.checkIDCard(id_str,label=label,error_msg=error_msg)
             return func(*args, **kwargs)
 
         return checkIDCard
